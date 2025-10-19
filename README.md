@@ -31,6 +31,7 @@ It provides APIs for managing hospital operations such as patient registration, 
 
 ---
 
+```bash
 ## 📂 Project Structure
 ├── src/
 │ ├── main/
@@ -46,7 +47,7 @@ It provides APIs for managing hospital operations such as patient registration, 
 │ └── test/ # Test cases
 ├── pom.xml # Maven dependencies
 └── README.md # Project documentation
-
+```
 ---
 
 ## ⚙️ Setup and Installation
