@@ -12,7 +12,8 @@ public class Hospital_User {
 
     public Hospital_User() {}
 
-    public Hospital_User(String username, String password) {
+    public Hospital_User(Long id, String username, String password) {
+    	this.id=id;
         this.username = username;
         this.password = password;
     }

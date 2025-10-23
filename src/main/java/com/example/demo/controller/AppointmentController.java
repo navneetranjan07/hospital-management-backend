@@ -36,7 +36,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Appointment> get(@PathVariable Long id) {
+    public ResponseEntity<Appointment> get(@PathVariable Integer id) {
         return ResponseEntity.ok(service.getAppointment(id));
     }
 
@@ -55,7 +55,7 @@ public class AppointmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Appointment> update(@PathVariable Long id, @RequestBody AppointmentRequest req) {
+    public ResponseEntity<Appointment> update(@PathVariable Integer id, @RequestBody AppointmentRequest req) {
         Appointment a = new Appointment();
         a.setAppointmentTime(LocalDateTime.parse(req.getAppointmentTime()));
         a.setPatient(patientRepo.findById(req.getPatientId())
@@ -68,7 +68,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.deleteAppointment(id);
         return ResponseEntity.noContent().build();
     }
