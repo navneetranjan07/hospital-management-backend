@@ -11,7 +11,6 @@ public class Patient {
 	private int age;
 	private String gender;
 	private String phone;
-	
 	public Long getId() {
 		return id;
 	}

@@ -18,7 +18,7 @@ public class AppointmentService {
         return repo.findAll();
     }
 
-    public Appointment getAppointment(Integer id) {
+    public Appointment getAppointment(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Appointment not found with id: " + id));
     }
@@ -27,7 +27,7 @@ public class AppointmentService {
         return repo.save(a);
     }
 
-    public Appointment updateAppointment(Integer id, Appointment a) {
+    public Appointment updateAppointment(Long id, Appointment a) {
         Appointment existing = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Appointment not found with id: " + id));
 
@@ -39,7 +39,7 @@ public class AppointmentService {
         return repo.save(existing);
     }
 
-    public void deleteAppointment(Integer id) {
+    public void deleteAppointment(Long id) {
         repo.deleteById(id);
     }
 }

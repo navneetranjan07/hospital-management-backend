@@ -12,30 +12,32 @@ import org.springframework.stereotype.Service;
 @Service
 public class OtpService {
 
-    @Autowired
-    private JavaMailSender mailSender;
-
-    private final Map<String, String> otpStorage = new HashMap<>();
-
-    // Send OTP
-    public void sendOtp(String email) {
-        String otp = String.valueOf(100000 + new Random().nextInt(900000));
-        otpStorage.put(email, otp);
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("Your OTP Code");
-        message.setText("Your verification OTP is: " + otp + "\n\nThis code will expire in 5 minutes.");
-
-        mailSender.send(message);
-    }
-
-    // Verify OTP
-    public boolean verifyOtp(String email, String otp) {
-        if (otpStorage.containsKey(email) && otpStorage.get(email).equals(otp)) {
-            otpStorage.remove(email); // remove after verification
-            return true;
-        }
-        return false;
-    }
+	@Autowired
+	private JavaMailSender mailsender;
+	
+	private final Map<String, String> otpStorage=new HashMap<>();
+	
+	
+//	send OTP
+	
+	public void sendOtp(String email) {
+		String otp= String.valueOf(100000 + new Random().nextInt(900000));
+		otpStorage.put(email, otp);
+		
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(email);
+		message.setSubject("Your OTP code");
+		message.setText("Your Verification OTP is : "+otp +"\n\n This code will expire in 5 minutes");
+		
+		mailsender.send(message);
+	}
+	
+//	verify OTP
+	public boolean verifyOtp(String email, String Otp) {
+		if(otpStorage.containsKey(email) && otpStorage.get(email).equals(Otp)) {
+			otpStorage.remove(email);  //remove after verification
+			return true;
+		}
+		return false;
+	}
 }

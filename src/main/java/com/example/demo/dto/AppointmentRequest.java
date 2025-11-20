@@ -1,7 +1,7 @@
 package com.example.demo.dto;
 
 public class AppointmentRequest {
-	private int id;
+	private Long id;
 	
 
 	private Long patientId;
@@ -9,11 +9,11 @@ public class AppointmentRequest {
 	private String appointmentTime; // Must be in ISO format (yyyy-MM-ddTHH:mm:ss)
 
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public Long getPatientId() {
