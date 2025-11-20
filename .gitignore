@@ -1,0 +1,48 @@
+# ----------------------------------------------------
+# 1. IDE and Local Configuration (IntelliJ IDEA)
+# ----------------------------------------------------
+# IntelliJ IDEA project files, which contain user-specific settings
+.idea/
+# IntelliJ module files
+*.iml
+# Workspace files
+*.iws
+*.ipr
+
+# ----------------------------------------------------
+# 2. Build Artifacts and Target Files (Maven/Spring Boot)
+# ----------------------------------------------------
+# Maven build directory (the 'target' folder)
+/target/
+# Compiled class files
+*.class
+
+# JAR, WAR, or ZIP files generated during the build
+*.jar
+*.war
+*.zip
+*.log
+
+# ----------------------------------------------------
+# 3. Sensitive Configuration & Dynamic Files
+# ----------------------------------------------------
+# CRITICAL: Exclude configuration files that contain secrets (passwords, keys).
+# If you use different environment-specific files, exclude them all.
+src/main/resources/application.properties
+src/main/resources/application.yml
+src/main/resources/application-dev.properties
+src/main/resources/application-local.properties
+src/main/resources/application-test.properties
+
+# Exclude temporary data or dynamic files
+*.tmp
+/temp/
+# Local H2/SQLite database files (if you use them)
+*.mv.db
+*.db
+
+# ----------------------------------------------------
+# 4. Operating System and Other
+# ----------------------------------------------------
+.DS_Store
+Thumbs.db
