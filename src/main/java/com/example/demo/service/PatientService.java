@@ -36,7 +36,6 @@ public class PatientService {
 		}
 		return null;
 	}
-	
 	public void deletePatient(Long id) {
 		repo.deleteById(id);
 	}
