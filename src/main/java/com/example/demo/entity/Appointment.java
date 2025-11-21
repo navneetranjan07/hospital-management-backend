@@ -6,53 +6,59 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table; // Import this
+import jakarta.persistence.UniqueConstraint; // Import this
 
 @Entity
-
+@Table(
+        name = "appointment",
+        // 👇 ADDED: Database-level unique constraint on doctor_id and appointment_time
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"doctor_id", "appointment_time"})
+        }
+)
 public class Appointment {
-	@Id
-	private Long id;
-	private LocalDateTime appointmentTime;
+    @Id
+    private Long id;
+    private LocalDateTime appointmentTime;
 
-	@ManyToOne
-	@JoinColumn(name = "patient_id")
-	private Patient patient;
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
 
-	@ManyToOne
-	@JoinColumn(name = "doctor_id")
-	private Doctor doctor;
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public LocalDateTime getAppointmentTime() {
-		return appointmentTime;
-	}
+    public LocalDateTime getAppointmentTime() {
+        return appointmentTime;
+    }
 
-	public void setAppointmentTime(LocalDateTime appointmentTime) {
-		this.appointmentTime = appointmentTime;
-	}
+    public void setAppointmentTime(LocalDateTime appointmentTime) {
+        this.appointmentTime = appointmentTime;
+    }
 
-	public Patient getPatient() {
-		return patient;
-	}
+    public Patient getPatient() {
+        return patient;
+    }
 
-	public void setPatient(Patient patient) {
-		this.patient = patient;
-	}
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
 
-	public Doctor getDoctor() {
-		return doctor;
-	}
+    public Doctor getDoctor() {
+        return doctor;
+    }
 
-	public void setDoctor(Doctor doctor) {
-		this.doctor = doctor;
-	}
-	
-	
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
 }
