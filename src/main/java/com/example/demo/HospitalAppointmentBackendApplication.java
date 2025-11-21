@@ -7,8 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class HospitalAppointmentBackendApplication {
 
 	public static void main(String[] args) {
-
-        SpringApplication.run(HospitalAppointmentBackendApplication.class, args);
+		SpringApplication.run(HospitalAppointmentBackendApplication.class, args);
 	}
 
 }
