@@ -6,20 +6,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table; // Import this
-import jakarta.persistence.UniqueConstraint; // Import this
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(
         name = "appointment",
-        // 👇 ADDED: Database-level unique constraint on doctor_id and appointment_time
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"doctor_id", "appointment_time"})
         }
 )
 public class Appointment {
+
     @Id
     private Long id;
+
     private LocalDateTime appointmentTime;
 
     @ManyToOne
@@ -33,7 +34,6 @@ public class Appointment {
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -41,7 +41,6 @@ public class Appointment {
     public LocalDateTime getAppointmentTime() {
         return appointmentTime;
     }
-
     public void setAppointmentTime(LocalDateTime appointmentTime) {
         this.appointmentTime = appointmentTime;
     }
@@ -49,7 +48,6 @@ public class Appointment {
     public Patient getPatient() {
         return patient;
     }
-
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
@@ -57,7 +55,6 @@ public class Appointment {
     public Doctor getDoctor() {
         return doctor;
     }
-
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }
