@@ -32,6 +32,7 @@ public class PatientService {
 			existing.setAge(p.getAge());
 			existing.setGender(p.getGender());
 			existing.setPhone(p.getPhone());
+            existing.setDiseaseDepartment(p.getDiseaseDepartment());
 			return repo.save(existing);
 		}
 		return null;

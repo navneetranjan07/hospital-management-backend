@@ -14,7 +14,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     Optional<Appointment> findByDoctorIdAndAppointmentTime(Long doctorId, LocalDateTime appointmentTime);
 
-    // ✅ Oracle native SQL — FULLY WORKING
     @Query(
             value = "SELECT COUNT(*) FROM appointment " +
                     "WHERE doctor_id = :doctorId " +

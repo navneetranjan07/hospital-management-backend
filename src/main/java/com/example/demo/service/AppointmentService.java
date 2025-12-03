@@ -33,10 +33,8 @@ public class AppointmentService {
         Long doctorId = a.getDoctor().getId();
         LocalDate appointmentDay = a.getAppointmentTime().toLocalDate();
 
-        // Convert to java.sql.Date for Oracle
         Date sqlDate = Date.valueOf(appointmentDay);
 
-        // 1. Daily limit check
         int dailyCount = repo.countDailyAppointments(doctorId, sqlDate);
         if (dailyCount >= 5) {
             throw new IllegalStateException(
@@ -44,7 +42,6 @@ public class AppointmentService {
             );
         }
 
-        // 2. Check exact time slot
         Optional<Appointment> existingAppointment =
                 repo.findByDoctorIdAndAppointmentTime(doctorId, a.getAppointmentTime());
 
@@ -54,7 +51,6 @@ public class AppointmentService {
             );
         }
 
-        // 3. Save appointment
         return repo.save(a);
     }
 

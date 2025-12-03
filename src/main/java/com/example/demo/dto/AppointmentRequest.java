@@ -5,7 +5,8 @@ public class AppointmentRequest {
     private Long id;
     private Long patientId;
     private Long doctorId;
-    private String appointmentTime; // yyyy-MM-ddTHH:mm:ss
+    private String appointmentTime;
+    private String diseaseDepartment;// yyyy-MM-ddTHH:mm:ss
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -18,4 +19,5 @@ public class AppointmentRequest {
 
     public String getAppointmentTime() { return appointmentTime; }
     public void setAppointmentTime(String appointmentTime) { this.appointmentTime = appointmentTime; }
+
 }
