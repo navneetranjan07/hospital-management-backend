@@ -23,12 +23,12 @@ public class PatientController {
 	@Autowired
 	PatientService service;
 
-	@GetMapping
+	@GetMapping("/fetchall")
 	public List<Patient> getAll(){
 		return service.getAllPatients();
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/fetch/{id}")
 	public Patient get(@PathVariable Long id) {
 		return service.getPatient(id);
 	}
@@ -38,12 +38,12 @@ public class PatientController {
 		return service.addPatient(p);
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/update/{id}")
 	public Patient update(@PathVariable Long id, @RequestBody Patient p) {
 		return service.updatePatient(id, p);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/delete/{id}")
 	public void delete(@PathVariable Long id) {
 		service.deletePatient(id);
 	}

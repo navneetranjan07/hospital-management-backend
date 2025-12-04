@@ -25,7 +25,7 @@ public class DepartmentController {
     }
 
     // Update
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public Department updateDepartment(
             @PathVariable Long id,
             @RequestBody Department dept) {
@@ -33,20 +33,20 @@ public class DepartmentController {
     }
 
     // Delete
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public String deleteDepartment(@PathVariable Long id) {
         service.deleteDepartment(id);
         return "Department deleted with ID: " + id;
     }
 
     // Get by ID
-    @GetMapping("/{id}")
+    @GetMapping("/find/{id}")
     public Department getOne(@PathVariable Long id) {
         return service.getDepartmentById(id);
     }
 
     // Get all
-    @GetMapping
+    @GetMapping("/fetchall")
     public List<Department> getAll() {
         return service.getAllDepartments();
     }

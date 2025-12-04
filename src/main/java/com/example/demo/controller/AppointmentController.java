@@ -29,12 +29,12 @@ public class AppointmentController {
     @Autowired
     private DoctorRepository doctorRepo;
 
-    @GetMapping
+    @GetMapping("/fetchall")
     public ResponseEntity<List<Appointment>> getAll() {
         return ResponseEntity.ok(service.getAllAppointment());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/find/{id}")
     public ResponseEntity<Appointment> get(@PathVariable Long id) {
         return ResponseEntity.ok(service.getAppointment(id));
     }
@@ -65,7 +65,7 @@ public class AppointmentController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Appointment> update(@PathVariable Long id,
                                               @RequestBody AppointmentRequest req) {
 
@@ -79,7 +79,7 @@ public class AppointmentController {
         return ResponseEntity.ok(service.updateAppointment(id, a));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.deleteAppointment(id);
         return ResponseEntity.noContent().build();

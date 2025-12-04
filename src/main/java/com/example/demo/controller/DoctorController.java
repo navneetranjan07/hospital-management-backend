@@ -24,12 +24,12 @@ public class DoctorController {
 	@Autowired
 	DoctorService service;
 
-	@GetMapping
+	@GetMapping("/fetchall")
 	public List<Doctor> getAll(){
 		return service.getAllDoctors();
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/find/{id}")
 	public Doctor get(@PathVariable Long id) {
 		return service.getDoctor(id);
 	}
@@ -39,12 +39,12 @@ public class DoctorController {
 		return service.addDoctor(d);
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/update/{id}")
 	public Doctor update(@PathVariable Long id, @RequestBody Doctor d) {
 		return service.updateDoctor(id, d);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/delete/{id}")
 	public void delete(@PathVariable Long id) {
 		service.deleteDoctor(id);
 	}
