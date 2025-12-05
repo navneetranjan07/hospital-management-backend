@@ -26,6 +26,7 @@ public class DepartmentController {
     // Create
     @PostMapping("/save")
     public Department createDepartment(@RequestBody Department dept) {
+        logger.info("Received request to create new department");
         try {
             logger.info("Creating new department");
             return service.addDepartment(dept);
@@ -40,6 +41,7 @@ public class DepartmentController {
     public Department updateDepartment(
             @PathVariable Long id,
             @RequestBody Department dept) {
+        logger.info("Received request to update department with ID: " + id);
         try {
             logger.info("Updating department with ID: " + id);
             dept.setId(id);
@@ -53,8 +55,9 @@ public class DepartmentController {
     // Delete
     @DeleteMapping("/delete/{id}")
     public String deleteDepartment(@PathVariable Long id) {
-        service.deleteDepartment(id);
+        logger.info("Received request to delete department with ID: " + id);
         try {
+            service.deleteDepartment(id);
             logger.info("Deleted department with ID: " + id);
             return "Department deleted with ID: " + id;
         } catch (Exception e) {
@@ -66,6 +69,7 @@ public class DepartmentController {
     // Get by ID
     @GetMapping("/find/{id}")
     public Department getOne(@PathVariable Long id) {
+        logger.info("Received request to fetch department with ID: " + id);
         try {
             logger.info("Fetching department with ID: " + id);
             return service.getDepartmentById(id);

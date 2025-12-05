@@ -18,6 +18,12 @@ public class DepartmentService {
 
     // Create
     public Department addDepartment(Department dept) {
+        if (dept.getId() == null) {
+            throw new RuntimeException("ID is required because you are adding ID manually!");
+        }
+        if (repo.existsById(dept.getId())) {
+            throw new RuntimeException("Department ID already exists! Use update API instead.");
+        }
         return repo.save(dept);
     }
 

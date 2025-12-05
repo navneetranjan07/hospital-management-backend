@@ -30,6 +30,7 @@ public class DoctorController {
 
     @GetMapping("/fetchall")
     public List<Doctor> getAll() {
+            logger.info("Received request to fetch all doctors");
         try {
             logger.info("Fetching all doctors");
             return service.getAllDoctors();
@@ -41,6 +42,7 @@ public class DoctorController {
 
     @GetMapping("/find/{id}")
     public Doctor get(@PathVariable Long id) {
+            logger.info("Received request to fetch doctor with ID: " + id);
         try {
             logger.info("Fetching doctor with ID: " + id);
             return service.getDoctor(id);
@@ -52,6 +54,7 @@ public class DoctorController {
 
     @PostMapping("/save")
     public Doctor add(@RequestBody Doctor d) {
+            logger.info("Received request to add new doctor");
         try {
             logger.info("Adding new doctor");
             return service.addDoctor(d);
@@ -63,6 +66,7 @@ public class DoctorController {
 
     @PutMapping("/update/{id}")
     public Doctor update(@PathVariable Long id, @RequestBody Doctor d) {
+            logger.info("Received request to update doctor with ID: " + id);
         try {
             logger.info("Updating doctor with ID: " + id);
             return service.updateDoctor(id, d);
@@ -74,6 +78,7 @@ public class DoctorController {
 
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id) {
+            logger.info("Received request to delete doctor with ID: " + id);
         try {
             logger.info("Deleting doctor with ID: " + id);
             service.deleteDoctor(id);

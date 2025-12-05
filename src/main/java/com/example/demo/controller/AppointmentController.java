@@ -35,37 +35,58 @@ public class AppointmentController {
 
     @GetMapping("/fetchall")
     public ResponseEntity<List<Appointment>> getAll() {
-        return ResponseEntity.ok(service.getAllAppointment());
+        logger.info("Received request to fetch all appointments");
+        try {
+            logger.info("Received request to fetch all appointments");
+            return ResponseEntity.ok(service.getAllAppointment());
+        } catch (Exception e) {
+            logger.error("Error fetching all appointments", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/find/{id}")
     public ResponseEntity<Appointment> get(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getAppointment(id));
+        logger.info("Received request to fetch appointment with ID: " + id);
+        try {
+            logger.info("Fetching appointment with ID: " + id);
+            return ResponseEntity.ok(service.getAppointment(id));
+        } catch (Exception e) {
+            logger.error("Error fetching appointment with ID: {}", id);
+            throw e;
+        }
     }
 
     @PostMapping("/save")
     public ResponseEntity<?> add(@RequestBody AppointmentRequest req) {
+        logger.info("Received request to add new appointment");
         try {
-            Appointment a = new Appointment();
-            a.setId(req.getId());
-            a.setAppointmentTime(LocalDateTime.parse(req.getAppointmentTime()));
-            a.setPatient(patientRepo.findById(req.getPatientId())
-                    .orElseThrow(() -> new RuntimeException("Patient not found")));
-            a.setDoctor(doctorRepo.findById(req.getDoctorId())
-                    .orElseThrow(() -> new RuntimeException("Doctor not found")));
+            logger.info("Adding new appointment");
+            try {
+                Appointment a = new Appointment();
+                a.setId(req.getId());
+                a.setAppointmentTime(LocalDateTime.parse(req.getAppointmentTime()));
+                a.setPatient(patientRepo.findById(req.getPatientId())
+                        .orElseThrow(() -> new RuntimeException("Patient not found")));
+                a.setDoctor(doctorRepo.findById(req.getDoctorId())
+                        .orElseThrow(() -> new RuntimeException("Doctor not found")));
 
-            Appointment saved = service.addAppointment(a);
-            return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+                Appointment saved = service.addAppointment(a);
+                return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            } catch (IllegalStateException e) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Booking failed: Doctor already booked at this time.");
+            } catch (DataIntegrityViolationException e) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Booking failed: Doctor already booked at this time.");
 
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            } catch (RuntimeException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            }
+        } catch (Exception e) {
+            logger.error("Error adding new appointments");
+            throw e;
         }
     }
 
@@ -73,19 +94,33 @@ public class AppointmentController {
     public ResponseEntity<Appointment> update(@PathVariable Long id,
                                               @RequestBody AppointmentRequest req) {
 
-        Appointment a = new Appointment();
-        a.setAppointmentTime(LocalDateTime.parse(req.getAppointmentTime()));
-        a.setPatient(patientRepo.findById(req.getPatientId())
-                .orElseThrow(() -> new RuntimeException("Patient not found")));
-        a.setDoctor(doctorRepo.findById(req.getDoctorId())
-                .orElseThrow(() -> new RuntimeException("Doctor not found")));
+        logger.info("Received request to update appointment with ID: " + id);
+        try{
+            logger.info("Updating appointment with ID: {}",id);
+            Appointment a = new Appointment();
+            a.setAppointmentTime(LocalDateTime.parse(req.getAppointmentTime()));
+            a.setPatient(patientRepo.findById(req.getPatientId())
+                    .orElseThrow(() -> new RuntimeException("Patient not found")));
+            a.setDoctor(doctorRepo.findById(req.getDoctorId())
+                    .orElseThrow(() -> new RuntimeException("Doctor not found")));
 
-        return ResponseEntity.ok(service.updateAppointment(id, a));
+            return ResponseEntity.ok(service.updateAppointment(id, a));
+        } catch (Exception e){
+            logger.error("Error updating appointment with ID: {}",id);
+            throw e;
+        }
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.deleteAppointment(id);
-        return ResponseEntity.noContent().build();
+        logger.info("Received request to delete appointment with ID: " + id);
+        try {
+            logger.info("Deleting appointment with ID: " + id);
+            service.deleteAppointment(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            logger.error("Error deleting appointment with ID: {}", id);
+            throw e;
+        }
     }
 }

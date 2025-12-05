@@ -22,6 +22,13 @@ public class DoctorService {
 	}
 	
 	public Doctor addDoctor(Doctor d) {
+        if (d.getId() == null) {
+            throw new RuntimeException("ID is required because you are adding ID manually!");
+        }
+
+        if (repo.existsById(d.getId())) {
+            throw new RuntimeException("Doctor ID already exists! Use update API instead.");
+        }
 		return repo.save(d);
 	}
 	

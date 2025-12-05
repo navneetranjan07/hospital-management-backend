@@ -22,9 +22,17 @@ public class PatientService {
 	}
 	
 	public Patient addPatient(Patient p) {
-		return repo.save(p);
+        if (p.getId() == null) {
+            throw new RuntimeException("ID is required because you are adding ID manually!");
+        }
+
+        if (repo.existsById(p.getId())) {
+            throw new RuntimeException("Patient ID already exists! Use update API instead.");
+        }
+
+        return repo.save(p);
 	}
-	
+
 	public Patient updatePatient(Long id, Patient p) {
 		Patient existing = repo.findById(id).orElse(null);
 		if(existing != null) {

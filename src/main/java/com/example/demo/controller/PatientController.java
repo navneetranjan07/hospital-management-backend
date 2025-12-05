@@ -29,6 +29,7 @@ public class PatientController {
 
 	@GetMapping("/fetchall")
 	public List<Patient> getAll(){
+        logger.info("Received request to fetch all patients");
         try {
             logger.info("Fetching all patients");
             return service.getAllPatients();
@@ -40,6 +41,7 @@ public class PatientController {
 
 	@GetMapping("/find/{id}")
 	public Patient get(@PathVariable Long id) {
+        logger.info("Received request to fetch patient with ID: ", id);
         try {
             logger.info("Fetching patient with ID: " + id);
             return service.getPatient(id);
@@ -51,6 +53,7 @@ public class PatientController {
 
 	@PostMapping("/save")
 	public Patient add(@RequestBody Patient p) {
+            logger.info("Received request to add new patient");
 		try {
             logger.info("Adding new patient");
             return service.addPatient(p);
@@ -62,6 +65,7 @@ public class PatientController {
 
 	@PutMapping("/update/{id}")
 	public Patient update(@PathVariable Long id, @RequestBody Patient p) {
+        logger.info("Received request to update patient with ID: " + id);
 		try {
             logger.info("Updating patient with ID: " + id);
             return service.updatePatient(id, p);
