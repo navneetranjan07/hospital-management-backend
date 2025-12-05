@@ -19,7 +19,7 @@ public class DepartmentController {
     }
 
     // Create
-    @PostMapping
+    @PostMapping("/save")
     public Department createDepartment(@RequestBody Department dept) {
         return service.addDepartment(dept);
     }

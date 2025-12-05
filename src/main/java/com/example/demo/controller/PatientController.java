@@ -33,7 +33,7 @@ public class PatientController {
 		return service.getPatient(id);
 	}
 
-	@PostMapping
+	@PostMapping("/save")
 	public Patient add(@RequestBody Patient p) {
 		return service.addPatient(p);
 	}

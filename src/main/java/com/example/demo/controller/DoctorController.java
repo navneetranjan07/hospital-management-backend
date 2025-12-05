@@ -34,7 +34,7 @@ public class DoctorController {
 		return service.getDoctor(id);
 	}
 
-	@PostMapping
+	@PostMapping("/save")
 	public Doctor add(@RequestBody Doctor d) {
 		return service.addDoctor(d);
 	}

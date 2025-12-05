@@ -39,7 +39,7 @@ public class AppointmentController {
         return ResponseEntity.ok(service.getAppointment(id));
     }
 
-    @PostMapping
+    @PostMapping("/save")
     public ResponseEntity<?> add(@RequestBody AppointmentRequest req) {
         try {
             Appointment a = new Appointment();
