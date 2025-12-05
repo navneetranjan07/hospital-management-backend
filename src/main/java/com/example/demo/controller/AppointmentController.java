@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ public class AppointmentController {
 
     @Autowired
     private DoctorRepository doctorRepo;
+
+    private static final Logger logger = LoggerFactory.getLogger(AppointmentController.class);
 
     @GetMapping("/fetchall")
     public ResponseEntity<List<Appointment>> getAll() {
