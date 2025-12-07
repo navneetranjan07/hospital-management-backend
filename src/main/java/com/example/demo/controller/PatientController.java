@@ -20,7 +20,7 @@ import com.example.demo.service.PatientService;
 
 @RestController
 @RequestMapping("/patients")
-@CrossOrigin
+//@CrossOrigin
 public class PatientController {
 	@Autowired
 	PatientService service;
@@ -41,7 +41,7 @@ public class PatientController {
 
 	@GetMapping("/find/{id}")
 	public Patient get(@PathVariable Long id) {
-        logger.info("Received request to fetch patient with ID: ", id);
+        logger.info("Received request to fetch patient with ID: {}", id);
         try {
             logger.info("Fetching patient with ID: " + id);
             return service.getPatient(id);

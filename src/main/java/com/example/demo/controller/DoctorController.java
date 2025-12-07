@@ -21,7 +21,7 @@ import com.example.demo.service.DoctorService;
 
 @RestController
 @RequestMapping("/doctors")
-@CrossOrigin
+//@CrossOrigin
 public class DoctorController {
     @Autowired
     DoctorService service;

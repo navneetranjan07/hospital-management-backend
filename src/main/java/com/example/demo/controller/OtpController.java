@@ -13,7 +13,7 @@ import com.example.demo.service.OtpService;
 
 @RestController
 @RequestMapping("/otp")
-@CrossOrigin
+//@CrossOrigin
 
 public class OtpController {
 

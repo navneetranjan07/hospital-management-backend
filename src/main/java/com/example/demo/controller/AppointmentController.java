@@ -19,7 +19,7 @@ import com.example.demo.service.AppointmentService;
 
 @RestController
 @RequestMapping("/appointments")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 public class AppointmentController {
 
     @Autowired
@@ -52,7 +52,7 @@ public class AppointmentController {
             logger.info("Fetching appointment with ID: " + id);
             return ResponseEntity.ok(service.getAppointment(id));
         } catch (Exception e) {
-            logger.error("Error fetching appointment with ID: {}", id);
+            logger.error("Error fetching appointment with ID: {}", id,e);
             throw e;
         }
     }
@@ -85,7 +85,7 @@ public class AppointmentController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             }
         } catch (Exception e) {
-            logger.error("Error adding new appointments");
+            logger.error("Error adding new appointments",e);
             throw e;
         }
     }
@@ -106,7 +106,7 @@ public class AppointmentController {
 
             return ResponseEntity.ok(service.updateAppointment(id, a));
         } catch (Exception e){
-            logger.error("Error updating appointment with ID: {}",id);
+            logger.error("Error updating appointment with ID: {}",id ,e);
             throw e;
         }
     }
@@ -119,7 +119,7 @@ public class AppointmentController {
             service.deleteAppointment(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            logger.error("Error deleting appointment with ID: {}", id);
+            logger.error("Error deleting appointment with ID: {}", id,e);
             throw e;
         }
     }
