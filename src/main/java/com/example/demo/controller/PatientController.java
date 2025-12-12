@@ -2,87 +2,77 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entity.Patient;
 import com.example.demo.service.PatientService;
 
 @RestController
 @RequestMapping("/patients")
-//@CrossOrigin
+@CrossOrigin(origins = "*")
 public class PatientController {
-	@Autowired
-	PatientService service;
 
-    private static final Logger logger = LoggerFactory.getLogger(PatientController.class);
+    @Autowired
+    PatientService service;
 
-	@GetMapping("/fetchall")
-	public List<Patient> getAll(){
-        logger.info("Received request to fetch all patients");
-        try {
-            logger.info("Fetching all patients");
-            return service.getAllPatients();
-        } catch (Exception e) {
-            logger.error("Error fetching all patients", e);
-            throw e;
-        }
-	}
+    // -------- 📄 PAGINATED FETCH --------
+    @GetMapping("/fetch")
+    public Page<Patient> fetchPaginated(
+            @RequestParam int page,
+            @RequestParam int size
+    ) {
+        return service.getPatientsPaged(page, size);
+    }
 
-	@GetMapping("/find/{id}")
-	public Patient get(@PathVariable Long id) {
-        logger.info("Received request to fetch patient with ID: {}", id);
-        try {
-            logger.info("Fetching patient with ID: " + id);
-            return service.getPatient(id);
-        } catch (Exception e) {
-            logger.error("Error fetching patient with ID: " + id, e);
-            throw e;
-        }
-	}
+    // -------- CRUD --------
+    @GetMapping("/fetchall")
+    public List<Patient> getAll() {
+        return service.getAllPatients();
+    }
 
-	@PostMapping("/save")
-	public Patient add(@RequestBody Patient p) {
-            logger.info("Received request to add new patient");
-		try {
-            logger.info("Adding new patient");
-            return service.addPatient(p);
-        } catch (Exception e) {
-            logger.error("Error adding new patient", e);
-            throw e;
-        }
-	}
+    @GetMapping("/find/{id}")
+    public Patient get(@PathVariable Long id) {
+        return service.getPatient(id);
+    }
 
-	@PutMapping("/update/{id}")
-	public Patient update(@PathVariable Long id, @RequestBody Patient p) {
-        logger.info("Received request to update patient with ID: " + id);
-		try {
-            logger.info("Updating patient with ID: " + id);
-            return service.updatePatient(id, p);
-        } catch (Exception e) {
-            logger.error("Error updating patient with ID: " + id, e);
-            throw e;
-        }
-	}
+    @PostMapping("/save")
+    public Patient add(@RequestBody Patient p) {
+        return service.addPatient(p);
+    }
 
-	@DeleteMapping("/delete/{id}")
-	public void delete(@PathVariable Long id) {
-		try {
-            logger.info("Deleting patient with ID: " + id);
-            service.deletePatient(id);
-        } catch (Exception e) {
-            logger.error("Error deleting patient with ID: " + id, e);
-            throw e;
-        }
-	}
+    @PutMapping("/update/{id}")
+    public Patient update(@PathVariable Long id, @RequestBody Patient p) {
+        return service.updatePatient(id, p);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable Long id) {
+        service.deletePatient(id);
+    }
+
+    // -------- 🔍 ADV SEARCH --------
+    @GetMapping("/search")
+    public List<Patient> searchByName(@RequestParam String keyword) {
+        return service.searchByName(keyword);
+    }
+
+    @GetMapping("/search/all")
+    public List<Patient> searchByNameOrCondition(@RequestParam String keyword) {
+        return service.searchByNameOrCondition(keyword);
+    }
+
+    @GetMapping("/filter/age")
+    public List<Patient> filterByAge(
+            @RequestParam int min,
+            @RequestParam int max
+    ) {
+        return service.filterByAge(min, max);
+    }
+
+    @GetMapping("/filter/gender")
+    public List<Patient> filterByGender(@RequestParam String gender) {
+        return service.filterByGender(gender);
+    }
 }

@@ -18,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-    
+
     @GetMapping
     public List<Hospital_User> getAll(){
 		try {
@@ -28,7 +28,7 @@ public class UserController {
             logger.error("Error fetching users", e);
             throw e;
         }
-    	
+
     }
 
     // Register new user
