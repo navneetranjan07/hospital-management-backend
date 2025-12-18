@@ -3,18 +3,35 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "PATIENT")
 public class Patient {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO ID
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "patient_seq_gen"
+    )
+    @SequenceGenerator(
+            name = "patient_seq_gen",
+            sequenceName = "PATIENT_SEQ",
+            allocationSize = 1
+    )
+    @Column(name = "ID")
     private Long id;
 
+    @Column(name = "NAME")
     private String name;
+
+    @Column(name = "AGE")
     private int age;
+
+    @Column(name = "GENDER")
     private String gender;
+
+    @Column(name = "PHONE")
     private String phone;
 
-    @Column(name = "disease_department")
+    @Column(name = "DISEASE_DEPARTMENT")
     private String diseaseDepartment;
 
     public Long getId() {
