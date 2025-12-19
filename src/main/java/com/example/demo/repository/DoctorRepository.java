@@ -9,17 +9,17 @@ import com.example.demo.entity.Doctor;
 
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
-    // -------- 📄 ORACLE PAGINATION --------
+    // ---------- PAGINATED FETCH (ALL) ----------
     @Query(
             value = """
-            SELECT * FROM (
-                SELECT d.*, ROWNUM rnum
-                FROM (
-                    SELECT * FROM doctor ORDER BY id
-                ) d
-                WHERE ROWNUM <= :endRow
-            )
-            WHERE rnum > :startRow
+        SELECT * FROM (
+            SELECT d.*, ROWNUM rnum
+            FROM (
+                SELECT * FROM doctor ORDER BY id
+            ) d
+            WHERE ROWNUM <= :endRow
+        )
+        WHERE rnum > :startRow
         """,
             nativeQuery = true
     )
@@ -30,4 +30,70 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
     @Query("SELECT COUNT(d) FROM Doctor d")
     long countDoctors();
+
+    // ---------- PAGINATED BY SPECIALIZATION ----------
+    @Query(
+            value = """
+        SELECT * FROM (
+            SELECT d.*, ROWNUM rnum
+            FROM (
+                SELECT * FROM doctor
+                WHERE LOWER(specialization) = LOWER(:specialization)
+                ORDER BY id
+            ) d
+            WHERE ROWNUM <= :endRow
+        )
+        WHERE rnum > :startRow
+        """,
+            nativeQuery = true
+    )
+    List<Doctor> getDoctorsBySpecializationPaged(
+            @Param("specialization") String specialization,
+            @Param("startRow") int startRow,
+            @Param("endRow") int endRow
+    );
+
+    @Query(
+            "SELECT COUNT(d) FROM Doctor d WHERE LOWER(d.specialization) = LOWER(:specialization)"
+    )
+    long countDoctorsBySpecialization(
+            @Param("specialization") String specialization
+    );
+
+    // ---------- SEARCH (NAME + SPECIALIZATION) ----------
+    @Query(
+            value = """
+        SELECT * FROM (
+            SELECT d.*, ROWNUM rnum
+            FROM (
+                SELECT * FROM doctor
+                WHERE LOWER(specialization) = LOWER(:specialization)
+                AND LOWER(name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                ORDER BY id
+            ) d
+            WHERE ROWNUM <= :endRow
+        )
+        WHERE rnum > :startRow
+        """,
+            nativeQuery = true
+    )
+    List<Doctor> searchDoctorsBySpecialization(
+            @Param("specialization") String specialization,
+            @Param("keyword") String keyword,
+            @Param("startRow") int startRow,
+            @Param("endRow") int endRow
+    );
+
+    @Query(
+            """
+            SELECT COUNT(d)
+            FROM Doctor d
+            WHERE LOWER(d.specialization) = LOWER(:specialization)
+            AND LOWER(d.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+            """
+    )
+    long countSearchDoctors(
+            @Param("specialization") String specialization,
+            @Param("keyword") String keyword
+    );
 }
