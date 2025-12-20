@@ -1,12 +1,18 @@
 package com.example.demo.controller;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.entity.Doctor;
 import com.example.demo.service.DoctorService;
@@ -19,99 +25,97 @@ public class DoctorController {
     @Autowired
     private DoctorService service;
 
-    private static final Logger logger =
-            LoggerFactory.getLogger(DoctorController.class);
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    // ------------------------------------------------
-    // PAGINATED FETCH (ALL DOCTORS)
-    // ------------------------------------------------
+    private static final String UPLOAD_DIR = "uploads/doctors/";
+
+    // ---------------- PAGINATED (ALL) ----------------
     @GetMapping("/fetch")
-    public Page<Doctor> fetchPaginated(
+    public Page<Doctor> fetch(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size
     ) {
-        logger.info("Fetching doctors | page={}, size={}", page, size);
         return service.getDoctorsPaged(page, size);
     }
 
-    // ------------------------------------------------
-    // PAGINATED BY SPECIALIZATION (DEPARTMENT)
-    // ------------------------------------------------
+    // ---------------- BY SPECIALIZATION ----------------
     @GetMapping("/specialization/{name}")
-    public Page<Doctor> getBySpecialization(
+    public Page<Doctor> bySpecialization(
             @PathVariable String name,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size
     ) {
-        logger.info(
-                "Fetching doctors by specialization={} | page={}, size={}",
-                name, page, size
-        );
         return service.getDoctorsBySpecialty(name, page, size);
     }
 
-    // ------------------------------------------------
-    // SEARCH (NAME + SPECIALIZATION)
-    // ------------------------------------------------
+    // ---------------- SEARCH ----------------
     @GetMapping("/search")
-    public Page<Doctor> searchDoctors(
+    public Page<Doctor> search(
             @RequestParam String specialization,
             @RequestParam String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size
     ) {
-        logger.info(
-                "Searching doctors | specialization={}, keyword={}, page={}, size={}",
-                specialization, keyword, page, size
-        );
         return service.searchDoctors(specialization, keyword, page, size);
     }
 
-    // ------------------------------------------------
-    // FETCH ALL (NO PAGINATION – ADMIN USE)
-    // ------------------------------------------------
+    // ---------------- FETCH ALL ----------------
     @GetMapping("/fetchall")
-    public List<Doctor> getAll() {
-        logger.info("Fetching all doctors (no pagination)");
+    public List<Doctor> fetchAll() {
         return service.getAllDoctors();
     }
 
-    // ------------------------------------------------
-    // FETCH SINGLE DOCTOR
-    // ------------------------------------------------
-    @GetMapping("/find/{id}")
-    public Doctor get(@PathVariable Long id) {
-        logger.info("Fetching doctor with ID={}", id);
-        return service.getDoctor(id);
+    // ---------------- CREATE (WITH IMAGE) ----------------
+    @PostMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Doctor save(
+            @RequestPart("doctor") String doctorJson,
+            @RequestPart(value = "image", required = false) MultipartFile image
+    ) throws Exception {
+
+        Doctor doctor = objectMapper.readValue(doctorJson, Doctor.class);
+
+        if (image != null && !image.isEmpty()) {
+            doctor.setImagePath(saveImage(image));
+        }
+
+        return service.addDoctor(doctor);
     }
 
-    // ------------------------------------------------
-    // CREATE
-    // ------------------------------------------------
-    @PostMapping("/save")
-    public Doctor add(@RequestBody Doctor d) {
-        logger.info("Adding new doctor: {}", d.getName());
-        return service.addDoctor(d);
-    }
-
-    // ------------------------------------------------
-    // UPDATE
-    // ------------------------------------------------
-    @PutMapping("/update/{id}")
+    // ---------------- UPDATE (WITH IMAGE) ----------------
+    @PutMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Doctor update(
             @PathVariable Long id,
-            @RequestBody Doctor d
-    ) {
-        logger.info("Updating doctor with ID={}", id);
-        return service.updateDoctor(id, d);
+            @RequestPart("doctor") String doctorJson,
+            @RequestPart(value = "image", required = false) MultipartFile image
+    ) throws Exception {
+
+        Doctor doctor = objectMapper.readValue(doctorJson, Doctor.class);
+
+        if (image != null && !image.isEmpty()) {
+            doctor.setImagePath(saveImage(image));
+        }
+
+        return service.updateDoctor(id, doctor);
     }
 
-    // ------------------------------------------------
-    // DELETE
-    // ------------------------------------------------
+    // ---------------- DELETE ----------------
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id) {
-        logger.info("Deleting doctor with ID={}", id);
         service.deleteDoctor(id);
+    }
+
+    // ---------------- IMAGE SAVE ----------------
+    private String saveImage(MultipartFile image) throws Exception {
+
+        File dir = new File(UPLOAD_DIR);
+        if (!dir.exists()) dir.mkdirs();
+
+        String filename = UUID.randomUUID() + "_" + image.getOriginalFilename();
+        Path path = Paths.get(UPLOAD_DIR + filename);
+
+        Files.write(path, image.getBytes());
+
+        return "/uploads/doctors/" + filename;
     }
 }

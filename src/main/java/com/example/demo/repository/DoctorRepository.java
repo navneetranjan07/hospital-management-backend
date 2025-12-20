@@ -15,7 +15,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
         SELECT * FROM (
             SELECT d.*, ROWNUM rnum
             FROM (
-                SELECT * FROM doctor ORDER BY id
+                SELECT * FROM DOCTOR ORDER BY ID
             ) d
             WHERE ROWNUM <= :endRow
         )
@@ -37,9 +37,9 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
         SELECT * FROM (
             SELECT d.*, ROWNUM rnum
             FROM (
-                SELECT * FROM doctor
-                WHERE LOWER(specialization) = LOWER(:specialization)
-                ORDER BY id
+                SELECT * FROM DOCTOR
+                WHERE LOWER(SPECIALIZATION) = LOWER(:specialization)
+                ORDER BY ID
             ) d
             WHERE ROWNUM <= :endRow
         )
@@ -53,23 +53,25 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
             @Param("endRow") int endRow
     );
 
-    @Query(
-            "SELECT COUNT(d) FROM Doctor d WHERE LOWER(d.specialization) = LOWER(:specialization)"
-    )
+    @Query("""
+        SELECT COUNT(d)
+        FROM Doctor d
+        WHERE LOWER(d.specialization) = LOWER(:specialization)
+    """)
     long countDoctorsBySpecialization(
             @Param("specialization") String specialization
     );
 
-    // ---------- SEARCH (NAME + SPECIALIZATION) ----------
+    // ---------- SEARCH ----------
     @Query(
             value = """
         SELECT * FROM (
             SELECT d.*, ROWNUM rnum
             FROM (
-                SELECT * FROM doctor
-                WHERE LOWER(specialization) = LOWER(:specialization)
-                AND LOWER(name) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                ORDER BY id
+                SELECT * FROM DOCTOR
+                WHERE LOWER(SPECIALIZATION) = LOWER(:specialization)
+                AND LOWER(NAME) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                ORDER BY ID
             ) d
             WHERE ROWNUM <= :endRow
         )
@@ -84,14 +86,12 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
             @Param("endRow") int endRow
     );
 
-    @Query(
-            """
-            SELECT COUNT(d)
-            FROM Doctor d
-            WHERE LOWER(d.specialization) = LOWER(:specialization)
-            AND LOWER(d.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
-            """
-    )
+    @Query("""
+        SELECT COUNT(d)
+        FROM Doctor d
+        WHERE LOWER(d.specialization) = LOWER(:specialization)
+        AND LOWER(d.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+    """)
     long countSearchDoctors(
             @Param("specialization") String specialization,
             @Param("keyword") String keyword

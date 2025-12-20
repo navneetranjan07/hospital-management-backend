@@ -29,12 +29,16 @@ public class Doctor {
     private String phone;
 
     @Column(name = "EXPERIENCE")
-    private Integer experience;   // years
+    private Integer experience;
 
     @Column(name = "FEES")
-    private Integer fees;         // consultation fees
+    private Integer fees;
 
-    // ---------- getters & setters ----------
+    @Column(name = "IMAGE_PATH")
+    private String imagePath;
+
+    // getters & setters
+
 
     public Long getId() {
         return id;
@@ -82,5 +86,13 @@ public class Doctor {
 
     public void setFees(Integer fees) {
         this.fees = fees;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }
