@@ -18,9 +18,6 @@ public class AppointmentService {
     @Autowired
     private AppointmentRepository repo;
 
-    // ------------------------------------
-    // 1️⃣ GET ALL / GET BY ID
-    // ------------------------------------
     public List<Appointment> getAllAppointment() {
         return repo.findAll();
     }
@@ -30,9 +27,6 @@ public class AppointmentService {
                 .orElseThrow(() -> new RuntimeException("Appointment not found with id: " + id));
     }
 
-    // ------------------------------------
-    // 2️⃣ ADD APPOINTMENT (with new conflict features)
-    // ------------------------------------
     @Transactional
     public Appointment addAppointment(Appointment a) {
 
@@ -40,11 +34,9 @@ public class AppointmentService {
         Long patientId = a.getPatient().getId();
         LocalDateTime appointmentTime = a.getAppointmentTime();
 
-        // Extract date only for daily limit
         LocalDate appointmentDay = appointmentTime.toLocalDate();
         Date sqlDate = Date.valueOf(appointmentDay);
 
-        // 🔍 1. Check daily limit for the doctor
         int dailyCount = repo.countDailyAppointments(doctorId, sqlDate);
         if (dailyCount >= 5) {
             throw new IllegalStateException(
@@ -52,7 +44,6 @@ public class AppointmentService {
             );
         }
 
-        // 🔍 2. Check if doctor is busy at same time
         boolean doctorBusy = repo.doctorBusy(doctorId, appointmentTime);
         if (doctorBusy) {
             throw new IllegalStateException(
@@ -60,7 +51,6 @@ public class AppointmentService {
             );
         }
 
-        // 🔍 3. Check if patient is busy at same time
         boolean patientBusy = repo.patientBusy(patientId, appointmentTime);
         if (patientBusy) {
             throw new IllegalStateException(
@@ -68,13 +58,9 @@ public class AppointmentService {
             );
         }
 
-        // All checks passed → save appointment
         return repo.save(a);
     }
 
-    // ------------------------------------
-    // 3️⃣ UPDATE APPOINTMENT
-    // ------------------------------------
     public Appointment updateAppointment(Long id, Appointment a) {
 
         Appointment existing = repo.findById(id)
@@ -87,40 +73,25 @@ public class AppointmentService {
         return repo.save(existing);
     }
 
-    // ------------------------------------
-    // 4️⃣ DELETE
-    // ------------------------------------
     public void deleteAppointment(Long id) {
         repo.deleteById(id);
     }
 
 
-    // ------------------------------------
-    // 5️⃣ NEW FEATURE: FILTER BY DATE RANGE
-    // ------------------------------------
     public List<Appointment> getAppointmentsByDateRange(LocalDate start, LocalDate end) {
         LocalDateTime startDT = start.atStartOfDay();
         LocalDateTime endDT = end.atTime(23, 59, 59);
         return repo.filterByDateRange(startDT, endDT);
     }
 
-    // ------------------------------------
-    // 6️⃣ NEW FEATURE: FILTER BY SPECIALIZATION
-    // ------------------------------------
     public List<Appointment> getByDoctorSpecialization(String specialization) {
         return repo.filterByDoctorSpecialization(specialization);
     }
 
-    // ------------------------------------
-    // 7️⃣ NEW FEATURE: ANALYTICS → Appointments per day
-    // ------------------------------------
     public List<Object[]> getAppointmentsPerDay() {
         return repo.appointmentsPerDay();
     }
 
-    // ------------------------------------
-    // 8️⃣ NEW FEATURE: ANALYTICS → Doctor workload
-    // ------------------------------------
     public List<Object[]> getDoctorWorkload() {
         return repo.doctorWorkload();
     }
