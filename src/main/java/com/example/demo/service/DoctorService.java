@@ -91,7 +91,6 @@ public class DoctorService {
         existing.setExperience(d.getExperience());
         existing.setFees(d.getFees());
 
-        // 🔥 preserve image
         if (d.getImagePath() != null && !d.getImagePath().isBlank()) {
             existing.setImagePath(d.getImagePath());
         }
