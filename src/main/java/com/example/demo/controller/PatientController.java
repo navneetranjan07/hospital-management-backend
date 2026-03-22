@@ -17,7 +17,6 @@ public class PatientController {
     @Autowired
     PatientService service;
 
-    // -------- 📄 PAGINATED FETCH --------
     @GetMapping("/fetch")
     public Page<Patient> fetchPaginated(
             @RequestParam int page,
@@ -26,7 +25,6 @@ public class PatientController {
         return service.getPatientsPaged(page, size);
     }
 
-    // -------- CRUD --------
     @GetMapping("/fetchall")
     public List<Patient> getAll() {
         return service.getAllPatients();
@@ -52,7 +50,6 @@ public class PatientController {
         service.deletePatient(id);
     }
 
-    // -------- 🔍 ADV SEARCH --------
     @GetMapping("/search")
     public List<Patient> searchByName(@RequestParam String keyword) {
         return service.searchByName(keyword);
