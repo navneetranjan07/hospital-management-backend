@@ -34,9 +34,6 @@ public class AppointmentController {
 
     private static final Logger logger = LoggerFactory.getLogger(AppointmentController.class);
 
-    // ---------------------------------------------------------
-    // FETCH ALL APPOINTMENTS
-    // ---------------------------------------------------------
     @GetMapping("/fetchall")
     public ResponseEntity<List<Appointment>> getAll() {
         logger.info("Received request to fetch all appointments");
@@ -48,9 +45,6 @@ public class AppointmentController {
         }
     }
 
-    // ---------------------------------------------------------
-    // GET APPOINTMENT BY ID
-    // ---------------------------------------------------------
     @GetMapping("/find/{id}")
     public ResponseEntity<Appointment> get(@PathVariable Long id) {
         logger.info("Received request to fetch appointment with ID: {}", id);
@@ -62,9 +56,6 @@ public class AppointmentController {
         }
     }
 
-    // ---------------------------------------------------------
-    // SAVE NEW APPOINTMENT
-    // ---------------------------------------------------------
     @PostMapping("/save")
     public ResponseEntity<?> add(@RequestBody AppointmentRequest req) {
         logger.info("Received request to add new appointment");
@@ -82,7 +73,6 @@ public class AppointmentController {
             return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 
         } catch (IllegalStateException e) {
-            // Doctor busy or patient busy
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 
         } catch (DataIntegrityViolationException e) {
@@ -98,9 +88,6 @@ public class AppointmentController {
         }
     }
 
-    // ---------------------------------------------------------
-    // UPDATE APPOINTMENT
-    // ---------------------------------------------------------
     @PutMapping("/update/{id}")
     public ResponseEntity<Appointment> update(@PathVariable Long id,
                                               @RequestBody AppointmentRequest req) {
@@ -122,10 +109,6 @@ public class AppointmentController {
             throw e;
         }
     }
-
-    // ---------------------------------------------------------
-    // DELETE APPOINTMENT
-    // ---------------------------------------------------------
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         logger.info("Received request to delete appointment with ID: {}", id);
@@ -140,9 +123,6 @@ public class AppointmentController {
         }
     }
 
-    // ---------------------------------------------------------
-    // FILTER: DATE RANGE
-    // ---------------------------------------------------------
     @GetMapping("/filter/date-range")
     public ResponseEntity<List<Appointment>> getByDateRange(@RequestParam LocalDate start,
                                                             @RequestParam LocalDate end) {
@@ -150,9 +130,6 @@ public class AppointmentController {
         return ResponseEntity.ok(service.getAppointmentsByDateRange(start, end));
     }
 
-    // ---------------------------------------------------------
-    // FILTER: DOCTOR SPECIALIZATION
-    // ---------------------------------------------------------
     @GetMapping("/filter/specialization")
     public ResponseEntity<List<Appointment>> getBySpecialization(@RequestParam String specialization) {
         logger.info("Filtering appointments by doctor specialization: {}", specialization);
