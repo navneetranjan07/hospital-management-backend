@@ -15,7 +15,6 @@ public class PatientService {
     @Autowired
     private PatientRepository repo;
 
-    // -------- 📄 ORACLE PAGINATION --------
     public Page<Patient> getPatientsPaged(int page, int size) {
 
         int startRow = page * size;
@@ -27,7 +26,6 @@ public class PatientService {
         return new PageImpl<>(patients, PageRequest.of(page, size), total);
     }
 
-    // -------- CRUD --------
     public List<Patient> getAllPatients() {
         return repo.findAll();
     }
@@ -62,7 +60,6 @@ public class PatientService {
         repo.deleteById(id);
     }
 
-    // -------- 🔍 ADV SEARCH --------
     public List<Patient> searchByName(String keyword) {
         return repo.searchByName(keyword);
     }
