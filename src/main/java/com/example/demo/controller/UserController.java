@@ -11,7 +11,6 @@ import com.example.demo.service.UserService;
 
 @RestController
 @RequestMapping("/userss")
-//@CrossOrigin// your React app URL
 public class UserController {
 
     @Autowired
@@ -31,7 +30,6 @@ public class UserController {
 
     }
 
-    // Register new user
     @PostMapping("/register")
     public Hospital_User register(@RequestBody Hospital_User user) {
         try {
@@ -43,7 +41,6 @@ public class UserController {
         }
     }
 
-    // Login user
     @PostMapping("/login")
     public Hospital_User login(@RequestBody Hospital_User user) {
     	try{
