@@ -30,7 +30,6 @@ public class DoctorController {
 
     private static final String UPLOAD_DIR = "uploads/doctors/";
 
-    // ---------------- PAGINATED (ALL) ----------------
     @GetMapping("/fetch")
     public Page<Doctor> fetch(
             @RequestParam(defaultValue = "0") int page,
@@ -39,7 +38,6 @@ public class DoctorController {
         return service.getDoctorsPaged(page, size);
     }
 
-    // ---------------- BY SPECIALIZATION ----------------
     @GetMapping("/specialization/{name}")
     public Page<Doctor> bySpecialization(
             @PathVariable String name,
@@ -49,7 +47,6 @@ public class DoctorController {
         return service.getDoctorsBySpecialty(name, page, size);
     }
 
-    // ---------------- SEARCH ----------------
     @GetMapping("/search")
     public Page<Doctor> search(
             @RequestParam String specialization,
@@ -60,13 +57,11 @@ public class DoctorController {
         return service.searchDoctors(specialization, keyword, page, size);
     }
 
-    // ---------------- FETCH ALL ----------------
     @GetMapping("/fetchall")
     public List<Doctor> fetchAll() {
         return service.getAllDoctors();
     }
 
-    // ---------------- CREATE (WITH IMAGE) ----------------
     @PostMapping(value = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Doctor save(
             @RequestPart("doctor") String doctorJson,
@@ -82,7 +77,6 @@ public class DoctorController {
         return service.addDoctor(doctor);
     }
 
-    // ---------------- UPDATE (WITH IMAGE) ----------------
     @PutMapping(value = "/update/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Doctor update(
             @PathVariable Long id,
@@ -99,13 +93,11 @@ public class DoctorController {
         return service.updateDoctor(id, doctor);
     }
 
-    // ---------------- DELETE ----------------
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id) {
         service.deleteDoctor(id);
     }
 
-    // ---------------- IMAGE SAVE ----------------
     private String saveImage(MultipartFile image) throws Exception {
 
         File dir = new File(UPLOAD_DIR);
